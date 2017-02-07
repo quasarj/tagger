@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { TagComponent } from './tag/tag.component';
 import { ReelComponent } from './reel/reel.component';
 import { ImageComponent } from './image/image.component';
+import { PictureService } from './picture.service';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +22,7 @@ import { ImageComponent } from './image/image.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [PictureService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,3 +1,11 @@
-<p>
-  tag works!
-</p>
+<div id="main">
+	<label>New Tag/search:</label>
+	<input type="text" id="search" [(ngModel)]="search" (keypress)="test($event);">
+
+	<ul>
+		<li *ngFor="let i of searchHistory">
+			<button (click)="buttonClick($event, i)">{{i}}</button>
+		</li>
+	</ul>
+	
+</div>

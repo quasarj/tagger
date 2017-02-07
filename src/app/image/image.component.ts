@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PictureService } from '../picture.service';
 
 @Component({
   selector: 'app-image',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImageComponent implements OnInit {
 
-  constructor() { }
+  private pid: number;
+  constructor(private service: PictureService) { }
 
   ngOnInit() {
+    this.service.pid$.subscribe(pid => this.pid = pid);
+  }
+
+  nextPic() {
+    this.service.nextPicture();
+  }
+  prevPic() {
+    this.service.prevPicture();
   }
 
 }
