@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 
 from sanic import Sanic
-from sanic.response import json, HTTPResponse
+from sanic.response import json, HTTPResponse, text
 import asyncpg
 # import base64
 import aiofiles
@@ -51,15 +51,28 @@ async def image_from_id(request, id):
 
 @app.route("/tags/<id:int>")
 async def get_tags(request, id):
-    pass
+    tags = await conn.fetch("select tag from tags where id = $1", id)
+    return json([t[0] for t in tags])
 
-@app.route("/add_tag/<id:int>")
-async def add_tag(request, id):
-    pass
+@app.route("/add_tag", methods=['POST'])
+async def add_tag(request):
+    id = int(request.json['id'])
+    tag_to_add = request.json['tag']
+    try:
+        await conn.execute("insert into tags values ($1, $2)", id, tag_to_add)
+    except asyncpg.exceptions.UniqueViolationError:
+        pass
+    return text(tag_to_add)
 
-@app.route("/remove_tag/<id:int>")
-async def remove_tag(request, id):
-    pass
+@app.route("/remove_tag", methods=['POST'])
+async def remove_tag(request):
+    id = int(request.json['id'])
+    tag_to_remove = request.json['tag']
+    try:
+        await conn.execute("delete from tags where id=$1 and tag=$2", id, tag_to_remove)
+    except asyncpg.exceptions.UniqueViolationError:
+        pass
+    return text(tag_to_remove)
 
 
 if __name__ == '__main__':
